@@ -87,6 +87,16 @@ class Coin:
     def add_coin():
         global _amount
         _amount = _amount + 20
+    def reduce_coin_forshield():
+        global _amount
+        _amount = _amount -100
+    def reduce_coin_forbullet():
+        global _amount
+        _amount = _amount -10
+    def check_coin_forshield():
+        pass
+    def check_coin_forbullet():
+        pass
     def check_collision(self,X,Y):
         car_rect=pygame.Rect(X,Y,CAR_WIDTH,CAR_HEIGHT)#arabanin ve objectlerin koordinatlarini ve dimensionlari ile iki rect objesi olusturuyor carpismayi kontrol etmek icin
         coin_rect=pygame.Rect(self._x,self._y,COIN_WIDTH,COIN_HEIGHT),
@@ -150,10 +160,11 @@ class UserCar(Car):
         self.bullet=[] 
         super().__init__()
     def fire_regular_bullet(self):
-        self.bullet.append(Bullet(self._x+self._width,self._y+self._height//2))
-        
+        if _amount>10:
+            self.bullet.append(Bullet(self._x+self._width,self._y+self._height//2))
+            Coin.reduce_coin_forbullet()
 
-        pass
+        
     def bulletcollision(self,object: RoadObject):
         for bullet in self.bullet:
             if bullet.active:
@@ -167,8 +178,10 @@ class UserCar(Car):
     def use_shield():
         pass
     def activate_shield(self):
-        self.shield = True
-        self.shieldtime = time.time()
+        if _amount>100:
+            self.shield = True
+            Coin.reduce_coin_forshield()
+            self.shieldtime = time.time()
     def deactivate_shield(self):
         currenttime = time.time()
         if currenttime - self.shieldtime>=5:
@@ -362,6 +375,8 @@ class RoadGame:
                         self._u.activate_shield()
                     if event.key == pygame.K_p:
                         self._u.pause()
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit()
             
             
             keys_pressed = pygame.key.get_pressed()
