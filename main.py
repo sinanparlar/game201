@@ -152,6 +152,8 @@ class UserCar(Car):
     def bulletcollision(self,object: RoadObject):
         for bullet in self.bullet:
             if bullet.active:
+                if bullet._x >= 900:
+                    self.bullet.remove(bullet)
                 a = bullet.checkcollision(object._x,object._y)
                 if a:
                     self.bullet.remove(bullet)
@@ -295,9 +297,11 @@ class RoadGame:
                 self._u.are_you_there_coin(coins)
     def delete_objects(self):
         for object in self._object:
-            if object._x <= 0:
+            if object._x <= 50:
                 self._object.remove(object) 
-                
+        for coins in self._coin:
+            if coins._x <= 50:
+                self._coin.remove(coins)        
                 
         
     def TimeTick(self): #timetick usecases
