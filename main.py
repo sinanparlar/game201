@@ -271,6 +271,9 @@ class RoadGame:
         WIN.blit(ROAD,(0,0))
         draw_text(WIN, str("Ready to Roll?"), 18, WIDTH/2, 10)
         #WIN.fill((0,0,0))
+        for object in self._object:
+            if object.active:
+                WIN.blit(ROCK,(object._x,object._y))
         if self._u.shield:
             WIN.blit(TANK, (self._u._x, self._u._y))
         else:
@@ -282,9 +285,7 @@ class RoadGame:
         for bullet in self._u.bullet:
             if bullet.active:
                 pygame.draw.rect(WIN,(255, 0, 0), (bullet._x, bullet._y-20 + self._u._height//2 - 2, bullet._width, bullet._height))
-        for object in self._object:
-            if object.active:
-                WIN.blit(ROCK,(object._x,object._y))
+        
         for coin in self._coin:
             if coin.active:
                 WIN.blit(COIN,(coin._x,coin._y))
