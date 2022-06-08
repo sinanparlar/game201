@@ -71,7 +71,7 @@ OBJECT_VEL = 2
 GENERATION_TIME = 800
 
 ROAD = pygame.transform.scale(pygame.image.load(
-    os.path.join('Assets', 'road.png')), (WIDTH, HEIGHT))
+    os.path.join('Assets', 'road2.png')), (WIDTH, HEIGHT))
 
 _amount=0
 
@@ -261,9 +261,9 @@ class RoadGame:
         self._coin.append(RoadObject(random.randint(50,450)))
     
     def draw_window(self):
-        #WIN.blit(ROAD,(0,0))
+        WIN.blit(ROAD,(0,0))
         draw_text(WIN, str("selam"), 18, WIDTH/2, 10)
-        WIN.fill((0,0,0))
+        #WIN.fill((0,0,0))
         WIN.blit(USER_CAR, (self._u._x, self._u._y))
         for police in self._policecar:
             WIN.blit(POLICE_CAR, (police._x, police._y))
@@ -293,6 +293,10 @@ class RoadGame:
         for coins in self._coin:
             if coins.active:
                 self._u.are_you_there_coin(coins)
+    def delete_objects(self):
+        for object in self._object:
+            if object._x <= 0:
+                self._object.remove(object) 
                 
                 
         
@@ -307,7 +311,7 @@ class RoadGame:
         if GENERATION_TIME >= 550:
                 GENERATION_TIME -=5
         self.checkcollision()
-      
+        self.delete_objects()
         
      
            
