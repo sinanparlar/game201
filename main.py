@@ -129,6 +129,9 @@ class RoadObject:
             self.active=False #self.b attribute'u false yapiyor, false olan objeler blit edilmiyor ekrana
             return True  #collide ederlerse true return ediyor
     
+    def deactivate(self):
+        self.active = False
+    
         
     
     def move(self):
@@ -149,8 +152,10 @@ class UserCar(Car):
     def bulletcollision(self,object: RoadObject):
         for bullet in self.bullet:
             if bullet.active:
-                bullet.checkcollision(object._x,object._y)
-                return bullet.checkcollision(object._x,object._y) 
+                a = bullet.checkcollision(object._x,object._y)
+                if a:
+                    self.bullet.remove(bullet)
+                return a 
         pass
     def use_shield():
         pass
@@ -203,7 +208,8 @@ class Bullet:
     def checkcollision(self,X,Y):
         bullet_rect=pygame.Rect(self._x,self._y,self._width,self._height)
         object_rect=pygame.Rect(X,Y,ROCK_WIDTH,ROCK_HEIGHT)
-        if  pygame.Rect.colliderect(bullet_rect,object_rect): 
+        a = pygame.Rect.colliderect(bullet_rect,object_rect) 
+        if a: 
             self.active=False
             return True
 
@@ -278,9 +284,10 @@ class RoadGame:
         for object in self._object:
             if object.active:
                 self._u.are_you_there_roadobject(object)
-                self._u.bulletcollision(object)#sends object to usercar
-                if self._u.bulletcollision(object):
-                    object.active= False   
+                a = self._u.bulletcollision(object)#sends object to usercar
+                if a: 
+                    object.deactivate()
+                    self._object.remove(object)  
         for police in self._policecar:
             self._u.are_you_there_policecar(police)
         for coins in self._coin:
