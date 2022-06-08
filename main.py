@@ -145,7 +145,7 @@ class UserCar(Car):
     def __init__(self):
         super().__init__()
         
-        self.shield = True
+        self.shield = False
         self.bullet=[] 
         super().__init__()
     def fire_regular_bullet(self):
@@ -165,8 +165,9 @@ class UserCar(Car):
         pass
     def use_shield():
         pass
-    def activate_shield():
-        pass
+    def activate_shield(self):
+        self.shield = True
+        
     def are_you_there_roadobject(self, roadobject: RoadObject):
         if self.shield == False:
             f = roadobject.check_collision(self._x,self._y) #kendi koordinatlarini roadobject'e yolluyor
