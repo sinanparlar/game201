@@ -146,6 +146,7 @@ class UserCar(Car):
         super().__init__()
         
         self.shield = False
+        self.shieldtime = 0
         self.bullet=[] 
         super().__init__()
     def fire_regular_bullet(self):
@@ -167,7 +168,12 @@ class UserCar(Car):
         pass
     def activate_shield(self):
         self.shield = True
-        
+        self.shieldtime = time.time()
+    def deactivate_shield(self):
+        currenttime = time.time()
+        if currenttime - self.shieldtime>=5:
+            self.shield = False
+
     def are_you_there_roadobject(self, roadobject: RoadObject):
         if self.shield == False:
             f = roadobject.check_collision(self._x,self._y) #kendi koordinatlarini roadobject'e yolluyor
@@ -231,6 +237,7 @@ class RoadGame:
         self._object=[]
         self._policecar=[]
         self._coin=[]
+        
         for i in range(25):
             self._policecar.append(PoliceCar(10,20*i))
     
@@ -327,6 +334,7 @@ class RoadGame:
                 GENERATION_TIME -=5
         self.checkcollision()
         self.delete_objects()
+        self._u.deactivate_shield()
         
      
            
