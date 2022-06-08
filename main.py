@@ -42,6 +42,10 @@ USER_CAR_IMAGE = pygame.image.load(os.path.join('assets', 'Audi.png'))
 USER_CAR = pygame.transform.rotate(pygame.transform.scale(
     USER_CAR_IMAGE, (CAR_WIDTH, CAR_HEIGHT)), 0)
 
+TANK_IMAGE = pygame.image.load(os.path.join('assets', 'tank4.png'))
+TANK = pygame.transform.rotate(pygame.transform.scale(
+    TANK_IMAGE, (CAR_WIDTH, CAR_HEIGHT)), 270)
+
 POLICE_CAR_IMAGE = pygame.image.load(os.path.join('assets', 'Police.png'))
 POLICE_CAR = pygame.transform.rotate(pygame.transform.scale(
 POLICE_CAR_IMAGE, (CAR_WIDTH, CAR_HEIGHT)), 0)
@@ -141,7 +145,7 @@ class UserCar(Car):
     def __init__(self):
         super().__init__()
         
-        self.shield = 100
+        self.shield = True
         self.bullet=[] 
         super().__init__()
     def fire_regular_bullet(self):
@@ -164,9 +168,10 @@ class UserCar(Car):
     def activate_shield():
         pass
     def are_you_there_roadobject(self, roadobject: RoadObject):
-        roadobject.check_collision(self._x,self._y) #kendi koordinatlarini roadobject'e yolluyor
-        if roadobject.check_collision(self._x,self._y): 
-            self.bounce_back() #true return ederse bounceback calisiyor araba geri 
+        if self.shield == False:
+            f = roadobject.check_collision(self._x,self._y) #kendi koordinatlarini roadobject'e yolluyor
+            if f: 
+                self.bounce_back() #true return ederse bounceback calisiyor araba geri 
                                 #sekiyor bu fonksiyon henuz tam calismiyor
     def are_you_there_coin(self, coin: Coin):
         coin.check_collision(self._x, self._y)
@@ -266,7 +271,12 @@ class RoadGame:
         WIN.blit(ROAD,(0,0))
         draw_text(WIN, str("selam"), 18, WIDTH/2, 10)
         #WIN.fill((0,0,0))
-        WIN.blit(USER_CAR, (self._u._x, self._u._y))
+        if self._u.shield:
+            WIN.blit(TANK, (self._u._x, self._u._y))
+        else:
+
+            WIN.blit(USER_CAR, (self._u._x, self._u._y))
+        
         for police in self._policecar:
             WIN.blit(POLICE_CAR, (police._x, police._y))
         for bullet in self._u.bullet:
