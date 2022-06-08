@@ -92,7 +92,7 @@ class Coin:
 
 
 class Car:
-    def __init__(self,x=500,y=200):
+    def __init__(self,x=100,y=200):
         self._x = x
         self._y = y
         self._width,self._height = CAR_WIDTH,CAR_HEIGHT
@@ -187,7 +187,27 @@ class UserCar(Car):
         if keys_pressed[pygame.K_s] and self._y + VEL + self._height < HEIGHT - 15:  # DOWN
             self._y += VEL
                 
-    
+    def pause(self):
+        paused = True
+        while paused:
+            for event in pygame.event.get():
+                """if event.type()==pygame.QUIT():
+                    pygame.quit()
+                    quit()"""""
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_c:
+                        paused = False
+                    elif event.key == pygame.K_q:
+                        pygame.quit(
+                            
+                            quit()
+                        )
+            WIN.fill((0,0,0))
+            #draw_text(WIN, str("Paused"), 18, WIDTH/2, 10)
+            draw_text(WIN, str("Press C to continue or Q to quit."), 18, WIDTH/2, 10)
+            pygame.display.update()
+            clock = pygame.time.Clock()
+            clock.tick(5)
     def fire_strong_bullet():
     
         pass
@@ -228,35 +248,7 @@ class RoadGame:
         for i in range(25):
             self._policecar.append(PoliceCar(10,20*i))
     
-
-        
-        
     
-    """def message_to_screen(self,msg,color):
-        screen_text = self.font.render(msg,True,color)
-        WIN.blit(screen_text, WIDTH/2, HEIGHT/2)"""
-    
-    """def pause():
-        paused = True
-        while paused:
-            for event in pygame.event.get():
-                if event.type()==pygame.QUIT():
-                    pygame.quit()
-                    quit()
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_c:
-                        paused = False
-                    elif event.key == pygame.K_q:
-                        pygame.quit(
-                            
-                            quit()
-                        )
-            WIN.fill(255,255,255)
-            RoadGame.message_to_screen("Paused", (0,0,0), -100,size="large")
-            RoadGame.message_to_screen("Press C to continue or Q to quit.",(0,0,0),25)
-            pygame.display.update()
-            clock = pygame.time.Clock()
-            clock.tick(5)"""
     def add_road_object(self):
         self._object.append(RoadObject(random.randint(50,450)))
     def add_coin(self):
@@ -264,7 +256,7 @@ class RoadGame:
     
     def draw_window(self):
         WIN.blit(ROAD,(0,0))
-        draw_text(WIN, str("selam"), 18, WIDTH/2, 10)
+        draw_text(WIN, str("Ready to Roll?"), 18, WIDTH/2, 10)
         #WIN.fill((0,0,0))
         WIN.blit(USER_CAR, (self._u._x, self._u._y))
         for police in self._policecar:
@@ -308,9 +300,9 @@ class RoadGame:
     #GENERATING RANDOM OBJECTS    
         global GENERATION_TIME
         r= random.randint(0,GENERATION_TIME)
-        if r <= 30:
+        if r <= 15:
             self.add_road_object()
-        if r<=15:
+        if r<=7:
             self.add_coin()   
         if GENERATION_TIME >= 550:
                 GENERATION_TIME -=5
@@ -335,15 +327,7 @@ class RoadGame:
             
             clock.tick(FPS)
             
-            """def score():
-                global points
-                points+=1
-                
-                text=font.Font("Points: " + str(points), True, (255,255,255))
-                textRect= text.get_rect()
-                textRect.center = (1000,40)
-                WIN.blit(text,textRect)"""
-            
+          
             
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -357,7 +341,7 @@ class RoadGame:
                     if event.key == pygame.K_l:
                         self._u.activate_shield()
                     if event.key == pygame.K_p:
-                        self.pause()
+                        self._u.pause()
             
             
             keys_pressed = pygame.key.get_pressed()
