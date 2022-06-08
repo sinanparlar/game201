@@ -102,7 +102,7 @@ class Coin:
 
 
 class Car:
-    def __init__(self,x=100,y=200):
+    def __init__(self,x=400,y=200):
         self._x = x
         self._y = y
         self._width,self._height = CAR_WIDTH,CAR_HEIGHT
