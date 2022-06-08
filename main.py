@@ -92,11 +92,7 @@ class Coin:
         _amount = _amount -100
     def reduce_coin_forbullet():
         global _amount
-        _amount = _amount -10
-    def check_coin_forshield():
-        pass
-    def check_coin_forbullet():
-        pass
+        _amount = _amount -50
     def check_collision(self,X,Y):
         car_rect=pygame.Rect(X,Y,CAR_WIDTH,CAR_HEIGHT)#arabanin ve objectlerin koordinatlarini ve dimensionlari ile iki rect objesi olusturuyor carpismayi kontrol etmek icin
         coin_rect=pygame.Rect(self._x,self._y,COIN_WIDTH,COIN_HEIGHT),
@@ -121,9 +117,21 @@ class PoliceCar(Car):
         car_rect=pygame.Rect(X,Y,CAR_WIDTH,CAR_HEIGHT)#arabanin ve objectlerin koordinatlarini ve dimensionlari ile iki rect objesi olusturuyor carpismayi kontrol etmek icin
         policecar_rect=pygame.Rect(self._x,self._y,CAR_WIDTH,CAR_HEIGHT),
         if  pygame.Rect.colliderect(car_rect,policecar_rect): #Oyunu bitiren kod
-            pygame.quit()
+            self.finish()
+            pygame.quit
+    def finish(self):
+        finished = True
+        while finished:
+            for event in pygame.event.get():
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_ESCAPE:
+                        pygame.quit(quit())
             
-    
+            WIN.fill((0,0,0))
+            draw_text(WIN, str("You Caught! Please press ESCAPE."), 18, WIDTH/2, 10)
+            pygame.display.update()
+            clock = pygame.time.Clock()
+            clock.tick(5) 
         
 
     
@@ -160,7 +168,7 @@ class UserCar(Car):
         self.bullet=[] 
         super().__init__()
     def fire_regular_bullet(self):
-        if _amount>10:
+        if _amount>=50:
             self.bullet.append(Bullet(self._x+self._width,self._y+self._height//2))
             Coin.reduce_coin_forbullet()
 
@@ -178,7 +186,7 @@ class UserCar(Car):
     def use_shield():
         pass
     def activate_shield(self):
-        if _amount>100:
+        if _amount>=100:
             self.shield = True
             Coin.reduce_coin_forshield()
             self.shieldtime = time.time()
