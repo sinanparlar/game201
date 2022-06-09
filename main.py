@@ -5,20 +5,23 @@ from tracemalloc import start
 from xml.etree.ElementTree import ProcessingInstruction
 from pip import main
 import pygame
+from pygame import mixer
 import sys
 import os
 import random
 import math
 import tkinter as tk
 from pyparsing import White
-
+pygame.init()
+pygame.mixer.init()
 CAR_WIDTH, CAR_HEIGHT = 55, 40
 REGCAR_WIDTH, REGCAR_HEIGHT = 35, 20
 ROCK_WIDTH, ROCK_HEIGHT = 30,30
 COIN_WIDTH, COIN_HEIGHT =30,30
 VEL = 5
 
-pygame.init()
+explosion= pygame.mixer.music.load(os.path.join('assets', 'hit-someting-6037.mp3'))
+fire_sound= pygame.mixer.music.load(os.path.join('assets', 'gun-gunshot-01.wav'))
 global points, newpoints, baba
 points = 0
 
@@ -71,7 +74,7 @@ WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 FPS = 60
 
 BULLET_VEL = 7
-OBJECT_VEL = 2
+OBJECT_VEL = 2.1
 
 GENERATION_TIME = 800
 
@@ -140,6 +143,7 @@ class RoadObject:
         car_rect=pygame.Rect(X,Y,CAR_WIDTH,CAR_HEIGHT)#arabanin ve objectlerin koordinatlarini ve dimensionlari ile iki rect objesi olusturuyor carpismayi kontrol etmek icin
         object_rect=pygame.Rect(self._x,self._y,ROCK_WIDTH,ROCK_HEIGHT),
         if  pygame.Rect.colliderect(car_rect,object_rect) == True: 
+            #pygame.mixer.Sound.play(explosion)
             self.active=False #self.b attribute'u false yapiyor, false olan objeler blit edilmiyor ekrana
             return True  #collide ederlerse true return ediyor
     
@@ -212,9 +216,6 @@ class UserCar(Car):
         paused = True
         while paused:
             for event in pygame.event.get():
-                """if event.type()==pygame.QUIT():
-                    pygame.quit()
-                    quit()"""""
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_c:
                         paused = False
@@ -224,7 +225,6 @@ class UserCar(Car):
                             quit()
                         )
             WIN.fill((0,0,0))
-            #draw_text(WIN, str("Paused"), 18, WIDTH/2, 10)
             draw_text(WIN, str("Press C to continue or Q to quit."), 18, WIDTH/2, 10)
             pygame.display.update()
             clock = pygame.time.Clock()
@@ -279,7 +279,6 @@ class RoadGame:
     def draw_window(self):
         WIN.blit(ROAD,(0,0))
         draw_text(WIN, str("Ready to Roll?"), 18, WIDTH/2, 10)
-        #WIN.fill((0,0,0))
         for object in self._object:
             if object.active:
                 WIN.blit(ROCK,(object._x,object._y))
@@ -334,6 +333,11 @@ class RoadGame:
         if r<=18 and r > 12:
             self.add_regular_car()
         elif r <= 12 and r>7:
+            global OBJECT_VEL
+            if OBJECT_VEL <15:
+                OBJECT_VEL = OBJECT_VEL + .5
+            else:
+                OBJECT_VEL = OBJECT_VEL - 1
             self.add_road_object()
         elif r<=7:
             self.add_coin()   
