@@ -193,6 +193,11 @@ class UserCar(Car):
             if f: 
                 self.bounce_back() #true return ederse bounceback calisiyor araba geri 
                                 #sekiyor bu fonksiyon henuz tam calismiyor
+    def are_you_there_regularcar(self, roadobject: RoadObject):
+        if self.shield == False:
+            f = roadobject.check_collision(self._x,self._y) #kendi koordinatlarini roadobject'e yolluyor
+            if f: 
+                self.bounce_back()
     def are_you_there_coin(self, coin: Coin):
         coin.check_collision(self._x, self._y)
         if coin.check_collision(self._x,self._y):
@@ -315,6 +320,8 @@ class RoadGame:
                     self._object.remove(object)  
         for police in self._policecar:
             self._u.are_you_there_policecar(police)
+        for regcar in self._regularcar:
+            self._u.are_you_there_regularcar(regcar)
         for coins in self._coin:
             if coins.active:
                 self._u.are_you_there_coin(coins)
